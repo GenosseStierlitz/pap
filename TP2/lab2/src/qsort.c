@@ -141,6 +141,7 @@ void parallel_qsort_sort (int *T, const int size)
 
     /* TODO: parallel sorting based on libc qsort() function +
      * sequential merging */
+    printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
     register int i;
     register int level;
     const register int TH = omp_get_max_threads ();
@@ -148,9 +149,16 @@ void parallel_qsort_sort (int *T, const int size)
     for (i=0; i<TH; i++){
         qsort(&(T[i*size_chunk]), size_chunk, sizeof(int), compare);
     }
-    for (level=TH>>1; T>0; level=level>>1){
-        printf("1\n");
+    for (level=TH; level>0; level=level>>1){
+        register int j = 1;
+        printf("merging level %d of:\n", level);
+        print_array(T);
+        for (i=0; i<level; i++){
+            printf("merging from %d of size %d\n", i*(1<<j), 1<<j);
+            merge(&(T[i*(1<<j)]), size_chunk*(1<<j));
+        }
     }
+    printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 
 }
 
@@ -224,6 +232,7 @@ int main (int argc, char **argv)
 
       if (! is_sorted (X))
 	{
+            print_array(X);
             fprintf(stderr, "ERROR: the array is not properly sorted\n") ;
             exit (-1) ;
 	}      
