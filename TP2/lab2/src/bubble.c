@@ -82,16 +82,51 @@ void sequential_bubble_sort (int *T, const int size)
                 T[i] = tmp;
                 swapped = 1;
             }
-
         }
     }
     while (swapped == 1);
     return ;
 }
 
+//remove this later
+//#define TH 8
+
 void parallel_bubble_sort (int *T, const int size)
 {
     /* TODO: parallel implementation of bubble sort */
+    register int i;
+    register int tmp;
+    register int k;
+    register int swapped;
+    const register int TH = omp_get_max_threads ();
+    const register int chunk_size = N/TH;
+    do {
+        swapped = 0;
+        //#pragma omp parallel for schedule(static) shared(T) private(k,i) reduction(+:swapped)
+        #pragma omp parallel for schedule(static) shared(T) private(tmp, i, k) reduction(+:swapped)
+        for (k = 0; k < TH; k++){
+            for (i=k*chunk_size; i<chunk_size*(k+1) - 1; i=i+1){
+                if (T[i] > T[i+1]){
+                    tmp = T[i+1];
+                    T[i+1] = T[i];
+                    T[i] = tmp;
+                    swapped = 1;
+                }
+
+            }
+        }
+        //swap border elements if necessary
+        for (k = 1; k < TH; k++){
+            if (T[k*chunk_size - 1] > T[k*chunk_size]){
+                tmp = T[k*chunk_size];
+                T[k*chunk_size] = T[k*chunk_size - 1];
+                T[k*chunk_size - 1] = tmp;
+                swapped = 1;
+            }
+        }
+
+    }
+    while (swapped == 1);
     
   return ;
 }
@@ -159,6 +194,7 @@ int main (int argc, char **argv)
       if (! is_sorted (X))
 	{
             fprintf(stderr, "ERROR: the array is not properly sorted\n") ;
+            print_array(X);
             exit (-1) ;
 	}
     }
