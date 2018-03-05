@@ -141,25 +141,28 @@ void parallel_qsort_sort (int *T, const int size)
 
     /* TODO: parallel sorting based on libc qsort() function +
      * sequential merging */
-    printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
+    //printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
     register int i;
     register int level;
     const register int TH = omp_get_max_threads ();
     register int size_chunk = size/TH;
+
+    if (size == 2) {
+        merge(T, 1);
+        return;
+    }
+
+    #pragma omp parallel for schedule(static) shared(size_chunk, T) private(i)
     for (i=0; i<TH; i++){
         qsort(&(T[i*size_chunk]), size_chunk, sizeof(int), compare);
     }
-    for (level=TH; level>0; level=level>>1){
-        register int j = 1;
-        printf("merging level %d of:\n", level);
-        print_array(T);
-        for (i=0; i<level; i++){
-            printf("merging from %d of size %d\n", i*(1<<j), 1<<j);
-            merge(&(T[i*(1<<j)]), size_chunk*(1<<j));
+    register int cs = size_chunk;
+    for (level=TH; level > 1; level=level>>1){
+        for (i=0; i < (level>>1) ; i=i+1){
+            merge(&(T[2*i*cs]), cs);
         }
+        cs = cs << 1;
     }
-    printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
-
 }
 
 
@@ -168,6 +171,28 @@ void parallel_qsort_sort1 (int *T, const int size)
 
     /* TODO: parallel sorting based on libc qsort() function +
      * PARALLEL merging */
+    register int i;
+    register int level;
+    const register int TH = omp_get_max_threads ();
+    register int size_chunk = size/TH;
+
+    if (size == 2) {
+        merge(T, 1);
+        return;
+    }
+
+    #pragma omp parallel for schedule(static) shared(size_chunk, T) private(i)
+    for (i=0; i<TH; i++){
+        qsort(&(T[i*size_chunk]), size_chunk, sizeof(int), compare);
+    }
+    register int cs = size_chunk;
+    for (level=TH; level > 1; level=level>>1){
+        #pragma omp parallel for schedule(dynamic) shared(T, level, cs) private(i)
+        for (i=0; i < (level>>1) ; i=i+1){
+            merge(&(T[2*i*cs]), cs);
+        }
+        cs = cs << 1;
+    }
 
 }
 
