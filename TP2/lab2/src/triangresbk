@@ -1,0 +1,107 @@
+number of threads 2
+Full matrix multiplication vector 		  1997168 cycles
+Triangular Matrix multiplication vector		  1017425 cycles
+Parallel Loop Static Scheduling 		  4115627 cycles
+Parallel Loop Dynamic Scheduling 		  657636 cycles
+Parallel Loop Guided Scheduling 		  626453 cycles
+Parallel Loop Runtime Scheduling 		  657803 cycles
+number of threads 2
+Full matrix multiplication vector 		  2013115 cycles
+Triangular Matrix multiplication vector		  1004818 cycles
+Parallel Loop Static Scheduling 		  4311551 cycles
+Parallel Loop Dynamic Scheduling 		  675580 cycles
+Parallel Loop Guided Scheduling 		  641440 cycles
+Parallel Loop Runtime Scheduling 		  675245 cycles
+number of threads 2
+Full matrix multiplication vector 		  2002328 cycles
+Triangular Matrix multiplication vector		  1007419 cycles
+Parallel Loop Static Scheduling 		  4231251 cycles
+Parallel Loop Dynamic Scheduling 		  667276 cycles
+Parallel Loop Guided Scheduling 		  627575 cycles
+Parallel Loop Runtime Scheduling 		  662606 cycles
+
+
+number of threads 2
+Full matrix multiplication vector 		  1986882 cycles
+Triangular Matrix multiplication vector		  1018343 cycles
+Parallel Loop Static Scheduling 		  2536619 cycles
+Parallel Loop Dynamic Scheduling 		  676259 cycles
+Parallel Loop Guided Scheduling 		  644284 cycles
+Parallel Loop Runtime Scheduling 		  676516 cycles
+number of threads 2
+Full matrix multiplication vector 		  1998048 cycles
+Triangular Matrix multiplication vector		  1024845 cycles
+Parallel Loop Static Scheduling 		  2537002 cycles
+Parallel Loop Dynamic Scheduling 		  675178 cycles
+Parallel Loop Guided Scheduling 		  632392 cycles
+Parallel Loop Runtime Scheduling 		  650183 cycles
+number of threads 2
+Full matrix multiplication vector 		  1995511 cycles
+Triangular Matrix multiplication vector		  1024908 cycles
+Parallel Loop Static Scheduling 		  2504352 cycles
+Parallel Loop Dynamic Scheduling 		  677592 cycles
+Parallel Loop Guided Scheduling 		  633015 cycles
+Parallel Loop Runtime Scheduling 		  643538 cycles
+number of threads 4
+Full matrix multiplication vector 		  1989052 cycles
+Triangular Matrix multiplication vector		  1024788 cycles
+Parallel Loop Static Scheduling 		  1633146 cycles
+Parallel Loop Dynamic Scheduling 		  425915 cycles
+Parallel Loop Guided Scheduling 		  397756 cycles
+Parallel Loop Runtime Scheduling 		  522064 cycles
+number of threads 4
+Full matrix multiplication vector 		  1979176 cycles
+Triangular Matrix multiplication vector		  1017706 cycles
+Parallel Loop Static Scheduling 		  1621865 cycles
+Parallel Loop Dynamic Scheduling 		  408415 cycles
+Parallel Loop Guided Scheduling 		  404257 cycles
+Parallel Loop Runtime Scheduling 		  515845 cycles
+number of threads 4
+Full matrix multiplication vector 		  2001964 cycles
+Triangular Matrix multiplication vector		  1021309 cycles
+Parallel Loop Static Scheduling 		  1613464 cycles
+Parallel Loop Dynamic Scheduling 		  412436 cycles
+Parallel Loop Guided Scheduling 		  397997 cycles
+Parallel Loop Runtime Scheduling 		  516842 cycles
+number of threads 8
+Full matrix multiplication vector 		  1981236 cycles
+Triangular Matrix multiplication vector		  1012043 cycles
+Parallel Loop Static Scheduling 		  885440 cycles
+Parallel Loop Dynamic Scheduling 		  237416 cycles
+Parallel Loop Guided Scheduling 		  242624 cycles
+Parallel Loop Runtime Scheduling 		  262834 cycles
+number of threads 8
+Full matrix multiplication vector 		  1995028 cycles
+Triangular Matrix multiplication vector		  1028782 cycles
+Parallel Loop Static Scheduling 		  883129 cycles
+Parallel Loop Dynamic Scheduling 		  237072 cycles
+Parallel Loop Guided Scheduling 		  245914 cycles
+Parallel Loop Runtime Scheduling 		  263357 cycles
+number of threads 8
+Full matrix multiplication vector 		  1872179 cycles
+Triangular Matrix multiplication vector		  1046162 cycles
+Parallel Loop Static Scheduling 		  874780 cycles
+Parallel Loop Dynamic Scheduling 		  234290 cycles
+Parallel Loop Guided Scheduling 		  237075 cycles
+Parallel Loop Runtime Scheduling 		  264542 cycles
+number of threads 16
+Full matrix multiplication vector 		  1994040 cycles
+Triangular Matrix multiplication vector		  1023493 cycles
+Parallel Loop Static Scheduling 		  1367825 cycles
+Parallel Loop Dynamic Scheduling 		  453548 cycles
+Parallel Loop Guided Scheduling 		  353495 cycles
+Parallel Loop Runtime Scheduling 		  615622 cycles
+number of threads 16
+Full matrix multiplication vector 		  2058604 cycles
+Triangular Matrix multiplication vector		  1045797 cycles
+Parallel Loop Static Scheduling 		  1491102 cycles
+Parallel Loop Dynamic Scheduling 		  432379 cycles
+Parallel Loop Guided Scheduling 		  430657 cycles
+Parallel Loop Runtime Scheduling 		  492768 cycles
+number of threads 16
+Full matrix multiplication vector 		  2131009 cycles
+Triangular Matrix multiplication vector		  1055012 cycles
+Parallel Loop Static Scheduling 		  1318054 cycles
+Parallel Loop Dynamic Scheduling 		  500279 cycles
+Parallel Loop Guided Scheduling 		  388988 cycles
+Parallel Loop Runtime Scheduling 		  622814 cycles
