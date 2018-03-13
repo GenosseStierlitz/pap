@@ -1,0 +1,84 @@
+number of threads 2
+Full matrix multiplication vector 		  1992658 cycles
+Triangular Matrix multiplication vector		  1022788 cycles
+Parallel Loop Static Scheduling 		  936588 cycles
+Parallel Loop Dynamic Scheduling 		  672809 cycles
+Parallel Loop Guided Scheduling 		  655860 cycles
+Parallel Loop Runtime Scheduling 		  674144 cycles
+number of threads 2
+Full matrix multiplication vector 		  2023742 cycles
+Triangular Matrix multiplication vector		  1052634 cycles
+Parallel Loop Static Scheduling 		  920734 cycles
+Parallel Loop Dynamic Scheduling 		  757615 cycles
+Parallel Loop Guided Scheduling 		  657782 cycles
+Parallel Loop Runtime Scheduling 		  631786 cycles
+number of threads 2
+Full matrix multiplication vector 		  1992917 cycles
+Triangular Matrix multiplication vector		  1020719 cycles
+Parallel Loop Static Scheduling 		  906440 cycles
+Parallel Loop Dynamic Scheduling 		  672381 cycles
+Parallel Loop Guided Scheduling 		  632400 cycles
+Parallel Loop Runtime Scheduling 		  631371 cycles
+number of threads 4
+Full matrix multiplication vector 		  1993816 cycles
+Triangular Matrix multiplication vector		  1022699 cycles
+Parallel Loop Static Scheduling 		  537468 cycles
+Parallel Loop Dynamic Scheduling 		  348823 cycles
+Parallel Loop Guided Scheduling 		  332575 cycles
+Parallel Loop Runtime Scheduling 		  319897 cycles
+number of threads 4
+Full matrix multiplication vector 		  1992468 cycles
+Triangular Matrix multiplication vector		  1019972 cycles
+Parallel Loop Static Scheduling 		  537720 cycles
+Parallel Loop Dynamic Scheduling 		  407065 cycles
+Parallel Loop Guided Scheduling 		  339294 cycles
+Parallel Loop Runtime Scheduling 		  319174 cycles
+number of threads 4
+Full matrix multiplication vector 		  1992220 cycles
+Triangular Matrix multiplication vector		  1024122 cycles
+Parallel Loop Static Scheduling 		  531266 cycles
+Parallel Loop Dynamic Scheduling 		  407720 cycles
+Parallel Loop Guided Scheduling 		  347975 cycles
+Parallel Loop Runtime Scheduling 		  318288 cycles
+number of threads 8
+Full matrix multiplication vector 		  1991442 cycles
+Triangular Matrix multiplication vector		  1019536 cycles
+Parallel Loop Static Scheduling 		  460863 cycles
+Parallel Loop Dynamic Scheduling 		  213330 cycles
+Parallel Loop Guided Scheduling 		  210964 cycles
+Parallel Loop Runtime Scheduling 		  257915 cycles
+number of threads 8
+Full matrix multiplication vector 		  1997291 cycles
+Triangular Matrix multiplication vector		  1031545 cycles
+Parallel Loop Static Scheduling 		  438882 cycles
+Parallel Loop Dynamic Scheduling 		  222342 cycles
+Parallel Loop Guided Scheduling 		  213840 cycles
+Parallel Loop Runtime Scheduling 		  257964 cycles
+number of threads 8
+Full matrix multiplication vector 		  1993211 cycles
+Triangular Matrix multiplication vector		  1017228 cycles
+Parallel Loop Static Scheduling 		  455523 cycles
+Parallel Loop Dynamic Scheduling 		  213401 cycles
+Parallel Loop Guided Scheduling 		  214049 cycles
+Parallel Loop Runtime Scheduling 		  258052 cycles
+number of threads 16
+Full matrix multiplication vector 		  1984844 cycles
+Triangular Matrix multiplication vector		  1027429 cycles
+Parallel Loop Static Scheduling 		  764889 cycles
+Parallel Loop Dynamic Scheduling 		  470353 cycles
+Parallel Loop Guided Scheduling 		  400372 cycles
+Parallel Loop Runtime Scheduling 		  513259 cycles
+number of threads 16
+Full matrix multiplication vector 		  1988476 cycles
+Triangular Matrix multiplication vector		  1025280 cycles
+Parallel Loop Static Scheduling 		  685622 cycles
+Parallel Loop Dynamic Scheduling 		  473041 cycles
+Parallel Loop Guided Scheduling 		  395859 cycles
+Parallel Loop Runtime Scheduling 		  609642 cycles
+number of threads 16
+Full matrix multiplication vector 		  1983624 cycles
+Triangular Matrix multiplication vector		  1020732 cycles
+Parallel Loop Static Scheduling 		  742314 cycles
+Parallel Loop Dynamic Scheduling 		  520281 cycles
+Parallel Loop Guided Scheduling 		  768046 cycles
+Parallel Loop Runtime Scheduling 		  543428 cycles
