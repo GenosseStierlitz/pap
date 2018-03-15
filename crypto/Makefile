@@ -1,4 +1,10 @@
-all: sipslash sipslash_break sipslash_32
+all: sipslash sipslash_break sipslash_32 sipslash_search
+	
+sipslash_search: sipslash_search.o
+	gcc -o sipslash_search sipslash_search.o
+
+sipslash_search.o: sipslash_search.c
+	gcc -c -O0  sipslash_search.c -Wall -pedantic -std=c99
 
 sipslash: sipslash.o
 	gcc -o sipslash sipslash.o
@@ -18,4 +24,4 @@ sipshash_break: sipshash_break.o
 sipshash_break.o: sipshash_break.c
 	gcc -c -O0  sipshash_break.c -Wall -pedantic -std=c99
 clean:
-	rm -f sipslash.o sipslash sipslash_break.o sipslash_break sipslash_32.o sipslash_32 *~
+	rm -f sipslash.o sipslash sipslash_break.o sipslash_break sipslash_32.o sipslash_32 sipslash_search sipslash_search.o *~
