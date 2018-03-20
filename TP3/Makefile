@@ -1,4 +1,4 @@
-all: hw1 hw2 hw3 hw4 hw5 hw6 hw7
+all: hw1 hw2 hw3 hw4 hw5 hw6 hw7 broadcast sum sum2 barrier grid
 
 hw1: hw1.c
 	mpicc -o hw1 hw1.c
@@ -20,3 +20,18 @@ hw6: hw6.c
 
 hw7: hw7.c
 	mpicc -o hw7 hw7.c
+
+broadcast: broadcast.c
+	mpicc -o broadcast broadcast.c
+
+sum: sum.c
+	mpicc -o sum sum.c
+
+sum2: sum2.c
+	mpicc -o sum2 sum2.c
+
+barrier: barrier.c
+	mpicc -o barrier barrier.c
+
+grid: grid.c
+	mpicc -o grid grid.c
