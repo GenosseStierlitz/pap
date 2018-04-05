@@ -1,4 +1,4 @@
-all: sipslash sipslash_break sipslash_32 sipslash_search twine_perm
+all: sipslash sipslash_break sipslash_32 sipslash_search twine_perm twine_fun1 twine_fun2
 
 
 twine_perm: twine_perm.o
@@ -6,6 +6,18 @@ twine_perm: twine_perm.o
 
 twine_perm.o: twine_perm.c
 	gcc -c -O0  twine_perm.c -Wall -pedantic -std=c99
+
+twine_fun1: twine_fun1.o
+	gcc -o twine_fun1 twine_fun1.o
+
+twine_fun1.o: twine_fun1.c
+	gcc -c -O0  twine_fun1.c -Wall -pedantic -std=c99
+
+twine_fun2: twine_fun2.o
+	gcc -o twine_fun2 twine_fun2.o
+
+twine_fun2.o: twine_fun2.c
+	gcc -c -O0  twine_fun2.c -Wall -pedantic -std=c99
 
 
 sipslash_search: sipslash_search.o
@@ -32,4 +44,4 @@ sipshash_break: sipshash_break.o
 sipshash_break.o: sipshash_break.c
 	gcc -c -O0  sipshash_break.c -Wall -pedantic -std=c99
 clean:
-	rm -f sipslash.o sipslash sipslash_break.o sipslash_break sipslash_32.o sipslash_32 sipslash_search sipslash_search.o twine_perm.o twine_perm *~
+	rm -f sipslash.o sipslash sipslash_break.o sipslash_break sipslash_32.o sipslash_32 sipslash_search sipslash_search.o twine_perm.o twine_perm twine_fun1.o twine_fun1 twine_fun2.o twine_fun2 *~

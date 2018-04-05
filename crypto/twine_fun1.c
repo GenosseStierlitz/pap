@@ -56,18 +56,30 @@ uint64_t twine_perm_z(uint64_t input){
     return c;;
 }
 
+uint32_t twine_fun1(uint32_t k, uint32_t m){
+    uint64_t km = m + (((uint64_t) k)<<32);
+    return twine_perm_z(km);
+
+}
+
 int main(void){
     //uint64_t a = 0x0000000000000000ULL;
     //uint64_t b = 0x123456789abcdef1ULL;
     //uint64_t c = 0xb4329ed38453aac8ULL;
-    unsigned long long a = 0x0000000000000000ULL;
-    unsigned long long b = 0x123456789abcdef1ULL;
-    unsigned long long c = 0xb4329ed38453aac8ULL;
+    //unsigned long long a = 0x0000000000000000ULL;
+    //unsigned long long b = 0x123456789abcdef1ULL;
+    //unsigned long long c = 0xb4329ed38453aac8ULL;
     //printf("1<<31: %"PRIx64"\n",(uint64_t) (1<<31));
     //printf("1<<31: %jx\n", (((uint64_t) 1)<<32));
-    printf("t(%jx) = %jx\n", a, twine_perm_z(a));
-    printf("t(%jx) = %jx\n", b, twine_perm_z(b));
-    printf("t(%jx) = %jx\n", c, twine_perm_z(c));
+    //printf("t(%jx) = %jx\n", a, twine_perm_z(a));
+    //printf("t(%jx) = %jx\n", b, twine_perm_z(b));
+    //printf("t(%jx) = %jx\n", c, twine_perm_z(c));
+    uint32_t k1 = 0x0;
+    uint32_t m1 = 0x0;
+    uint32_t k2 = 0xcdef1234;
+    uint32_t m2 = 0xab123478;
+    printf("f(%"PRIx32", %"PRIx32") = %"PRIx32"\n", k1, m1, twine_fun1(k1, m1));
+    printf("f(%"PRIx32", %"PRIx32") = %"PRIx32"\n", k2, m2, twine_fun1(k2, m2));
     return 0; 
 }
 
