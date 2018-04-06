@@ -17,8 +17,11 @@ x=range(1,1001)
 #print(y)
 #plt.plot(x,y,label='Loaded from out_file.txt')
 for i in range(0,1000):
-    z[i]=sum(y[:i]) / float(i+1)
+    #z[i]=sum(y[:i]) / float(i+1)
+    #z[i]=min(y[:i+1])
+    z[i]=max(y[:i+1]) 
 
+print(z)
 plt.plot (x,z,label='Loaded from out_file.txt')
 
 plt.xlabel('Values from 1->1000')
