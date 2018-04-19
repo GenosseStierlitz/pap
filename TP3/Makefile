@@ -1,4 +1,4 @@
-all: hw1 hw2 hw3 hw4 hw5 hw6 hw7 broadcast sum sum2 barrier fox_totally_going_to_work cannon
+all: hw1 hw2 hw3 hw4 hw5 hw6 hw7 broadcast sum sum2 barrier fox_totally_going_to_work cannon fox_data cannon_data
 
 hw1: hw1.c
 	mpicc -o hw1 hw1.c
@@ -39,3 +39,8 @@ fox_totally_going_to_work: fox_totally_going_to_work.c
 cannon: cannon.c
 	mpicc -o cannon cannon.c -lm
 
+fox_data: fox_data.c
+	mpicc -o fox_data fox_data.c -lm
+
+cannon_data: cannon_data.c
+	mpicc -o cannon_data cannon_data.c -lm
