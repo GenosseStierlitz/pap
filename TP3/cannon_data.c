@@ -35,8 +35,6 @@ void matrix_copy(int m1[], int m2[], int size){
 }
 
 MPI_Comm *create_grid(int nnodes, int ndims, int dims[], MPI_Comm comm_old, int periods[], int reorder){
-    // ex: 12 2 {3, 4} MPI_COMM_WORLD {0, 0} false
-    printf("Basic Succes\n");
     MPI_Dims_create(nnodes, ndims, dims);
     MPI_Comm *comm_cart = malloc(sizeof(MPI_Comm));
     if (MPI_Cart_create(comm_old, ndims, dims, periods, reorder, comm_cart) == MPI_SUCCESS){
@@ -90,11 +88,6 @@ int main(int argc, char *argv[]){
     MPI_Comm *comm_cart = create_grid(nnodes, ndims, dims, MPI_COMM_WORLD,periods, reorder);
     MPI_Comm_rank(MPI_COMM_WORLD, &my_torus_rank);
 
-    // Splitting the grid communicator into rows
-    //int remaindims[2] = { 0, 1 }; // from Stackoverflow
-    //MPI_Comm comm_row;
-    //MPI_Cart_sub(*comm_cart, remaindims, &comm_row);
-
     /*--------Data------------*/
 
     /*dimension of an individual block*/
@@ -102,17 +95,13 @@ int main(int argc, char *argv[]){
 
     /*blocks*/
     int A[n*n];
-    int AC[n*n];
     int B[n*n];
-    int BC[n*n];
     int C[n*n];
     int CC[n*n];
 
     /*filling the matrix*/
     int i, j;
     for (i = 0; i < n*n; i++){
-        //A[i] = i + my_rank;
-        //B[i] = i - my_rank;
         C[i] = 0;
     }
 
@@ -120,21 +109,11 @@ int main(int argc, char *argv[]){
     int coords[ndims]; 
     MPI_Cart_coords(*comm_cart, my_torus_rank, ndims, coords);
 
-    // testing
-    //printf("Process %d's coords: ", my_rank);
-    //print_array_int(coords, ndims);
-    //print_matrix(A, n);
-    //print_matrix(B, n);
-    //still for testing: reconstruct the big matrices at process 0 and print them
-    
     int MA[n*n*q*q];
     int MB[n*n*q*q];
     int MC[n*n*q*q];
 
     if (my_rank == 0){
-        //int *MA = (int *) malloc(n*n*q*q*sizeof(int));
-        //int *MB = (int *) malloc(n*n*q*q*sizeof(int));
-        //int *MC = (int *) malloc(n*n*q*q*sizeof(int));
         int rank;
         int i, j;
         for (rank = 0; rank < size; rank++){
@@ -165,6 +144,7 @@ int main(int argc, char *argv[]){
     MPI_Type_create_resized(block, 0, sizeof(int), &block2);
     MPI_Type_commit(&block2);
 
+    // displacement of blocks for different processes
     int disps[q*q];
     int counts[q*q];
     for (i = 0; i < q; i++){
@@ -174,22 +154,19 @@ int main(int argc, char *argv[]){
         }
     }
 
+    // Scatter blocks of C among processes
     MPI_Scatterv(MA, counts, disps, block2, A, n*n, MPI_INT, 0, *comm_cart);
     MPI_Scatterv(MB, counts, disps, block2, B, n*n, MPI_INT, 0, *comm_cart);
  
     int src, dest;
     // Preskewing of A
     MPI_Cart_shift(*comm_cart, 1, coords[0], &src, &dest);
-    MPI_Send(A, n*n, MPI_INT, src, 99, *comm_cart);
-    MPI_Recv(AC, n*n, MPI_INT, dest, 99, *comm_cart, &status);
-    matrix_copy(AC, A, n);
+    MPI_Sendrecv_replace(A, n*n, MPI_INT, src, 99, dest, 99, *comm_cart, &status);
 
     // Preskewing of B
     MPI_Cart_shift(*comm_cart, 0, coords[1], &src, &dest);
-    MPI_Send(B, n*n, MPI_INT, src, 99, *comm_cart);
-    MPI_Recv(BC, n*n, MPI_INT, dest, 99, *comm_cart, &status);
-    matrix_copy(BC, B, n);
-     
+    MPI_Sendrecv_replace(B, n*n, MPI_INT, src, 99, dest, 99, *comm_cart, &status);
+
     // iterations of Cannon algorithm 
     int k;
     for(k = 0; k < q; k++){
@@ -199,36 +176,28 @@ int main(int argc, char *argv[]){
 
         // horizontal shift of A
         MPI_Cart_shift(*comm_cart, 1, 1, &src, &dest);
-        MPI_Send(A, n*n, MPI_INT, src, 99, *comm_cart);
-        MPI_Recv(AC, n*n, MPI_INT, dest, 99, *comm_cart, &status);
-        matrix_copy(AC, A, n);
+        MPI_Sendrecv_replace(A, n*n, MPI_INT, src, 99, dest, 99, *comm_cart, &status);
 
         // vertical shift of B
         MPI_Cart_shift(*comm_cart, 0, 1, &src, &dest);
-        MPI_Send(B, n*n, MPI_INT, src, 99, *comm_cart);
-        MPI_Recv(BC, n*n, MPI_INT, dest, 99, *comm_cart, &status);
-        matrix_copy(BC, B, n);
+        MPI_Sendrecv_replace(B, n*n, MPI_INT, src, 99, dest, 99, *comm_cart, &status);
     }
     
     // Useless?
     // Postskewing of A
     MPI_Cart_shift(*comm_cart, 1, coords[0], &src, &dest);
-    MPI_Send(A, n*n, MPI_INT, dest, 99, *comm_cart);
-    MPI_Recv(AC, n*n, MPI_INT, src, 99, *comm_cart, &status);
-    matrix_copy(AC, A, n);
+    MPI_Sendrecv_replace(A, n*n, MPI_INT, dest, 99, src, 99, *comm_cart, &status);
 
     // Postskewing of B
     MPI_Cart_shift(*comm_cart, 0, coords[1], &src, &dest);
-    MPI_Send(B, n*n, MPI_INT, dest, 99, *comm_cart);
-    MPI_Recv(BC, n*n, MPI_INT, src, 99, *comm_cart, &status);
-    matrix_copy(BC, B, n);
+    MPI_Sendrecv_replace(A, n*n, MPI_INT, dest, 99, src, 99, *comm_cart, &status);
 
+    // Gather individual blocks of C
     MPI_Gatherv(C, 1, MPI_INT, MC, counts, disps, MPI_INT, 0, MPI_COMM_WORLD);
     if (my_rank == 0){
         printf("MC : \n");
         print_matrix(MC, n*q);
     }
-    //printf("C at block %dx%d\n", coords[0], coords[1]);
 
     MPI_Finalize();
     

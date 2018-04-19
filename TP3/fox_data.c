@@ -35,8 +35,6 @@ void matrix_copy(int m1[], int m2[], int size){
 }
 
 MPI_Comm *create_grid(int nnodes, int ndims, int dims[], MPI_Comm comm_old, int periods[], int reorder){
-    // ex: 12 2 {3, 4} MPI_COMM_WORLD {0, 0} false
-    printf("Basic Succes\n");
     MPI_Dims_create(nnodes, ndims, dims);
     MPI_Comm *comm_cart = malloc(sizeof(MPI_Comm));
     if (MPI_Cart_create(comm_old, ndims, dims, periods, reorder, comm_cart) == MPI_SUCCESS){
@@ -103,15 +101,12 @@ int main(int argc, char *argv[]){
     /*blocks*/
     int A[n*n];
     int B[n*n];
-    int BC[n*n];
     int C[n*n];
     int CC[n*n];
 
     /*filling the matrix*/
     int i, j;
     for (i = 0; i < n*n; i++){
-    //    A[i] = i + my_rank;
-    //    B[i] = i - my_rank;
         C[i] = 0;
     }
 
@@ -121,12 +116,10 @@ int main(int argc, char *argv[]){
     int coords[ndims]; 
     MPI_Cart_coords(*comm_cart, my_torus_rank, ndims, coords);
 
-    //int *MA = (int *) malloc(n*n*q*q*sizeof(int)); // TODO: find a way to allocate only on 0
-    //int *MB = (int *) malloc(n*n*q*q*sizeof(int));
-    //int *MC = (int *) malloc(n*n*q*q*sizeof(int));
     int MA[n*n*q*q];
     int MB[n*n*q*q];
     int MC[n*n*q*q];
+
     // Process 0 initializes the matrix
     if (my_rank == 0){
         int rank;
@@ -152,6 +145,7 @@ int main(int argc, char *argv[]){
         print_matrix(MC, n*q);
     }
 
+    // define the block type to be sent to the processes
     MPI_Datatype block;
     MPI_Datatype block2;
     MPI_Type_vector(n, n, q*n, MPI_INT, &block);
@@ -159,6 +153,7 @@ int main(int argc, char *argv[]){
     MPI_Type_create_resized(block, 0, sizeof(int), &block2);
     MPI_Type_commit(&block2);
 
+    // displacement of blocks for different processes
     int disps[q*q];
     int counts[q*q];
     for (i = 0; i < q; i++){
@@ -167,19 +162,11 @@ int main(int argc, char *argv[]){
             counts[i*q+j] = 1;
         }
     }
+    // Scatter blocks of C among processes
     MPI_Scatterv(MA, counts, disps, block2, A, n*n, MPI_INT, 0, *comm_cart);
     MPI_Scatterv(MB, counts, disps, block2, B, n*n, MPI_INT, 0, *comm_cart);
-    //MPI_Scatter(MA, 1, block, A, 1, block, 0, *comm_cart);
-    //MPI_Scatter(MB, 1, block, B, 1, block, 0, *comm_cart);
-    //printf("Process %d's coords: ", my_rank);
-    //print_array_int(coords, ndims);
-    //printf("A = \n");
-    //print_matrix(A, n);
-    //MPI_Barrier(*comm_cart); // TODO: delme, after the printfs are gone
-    //print_matrix(B, n);
     
     // iterations of the Fox algorithm
-    
     int t;
     for(t = 0; t < q; t++){
         //(re-)fill the buffer
@@ -188,8 +175,6 @@ int main(int argc, char *argv[]){
         }
         //Broadcast the diagonal
         MPI_Bcast(AD, n*n, MPI_INT, (t+coords[0]) % q, comm_row);
-        //printf("broadcast of the diagonal of A at iteration %d\n", t);
-        //print_matrix(AD, n);
 
         //Perform local computations
         matrix_product(AD, B, CC, n);
@@ -199,22 +184,11 @@ int main(int argc, char *argv[]){
         int src;
         int dest;
         MPI_Cart_shift(*comm_cart, 0, 1, &src, &dest); // getting the shifted ranks for source and destiantion
-        //MPI_Send(B, n*n, MPI_INT, dest, 99, *comm_cart);
-        //MPI_Recv(BC, n*n, MPI_INT, src, 99, *comm_cart, &status);
-        MPI_Send(B, n*n, MPI_INT, src, 99, *comm_cart);
-        MPI_Recv(BC, n*n, MPI_INT, dest, 99, *comm_cart, &status);
-        matrix_copy(BC, B, n);
+        MPI_Sendrecv_replace(B, n*n, MPI_INT, src, 99, dest, 99, *comm_cart, &status);
 
-        //printf("A, B and C after iteration %d\n", t);
-        //print_matrix(A, n);
-        //print_matrix(B, n);
-        //print_matrix(C, n);
     }
-    //MPI_Barrier(*comm_cart); // TODO: delme, after the printfs are gone
-    //printf("C at block %dx%d\n", coords[0], coords[1]);
-    //print_matrix(C, n);
 
-    //MPI_Barrier(*comm_cart); // TODO: delme, after the printfs are gone
+    // Gather individual blocks of C
     MPI_Gatherv(C, 1, MPI_INT, MC, counts, disps, MPI_INT, 0, MPI_COMM_WORLD);
     if (my_rank == 0){
         printf("MC : \n");

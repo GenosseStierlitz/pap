@@ -90,11 +90,6 @@ int main(int argc, char *argv[]){
     MPI_Comm *comm_cart = create_grid(nnodes, ndims, dims, MPI_COMM_WORLD,periods, reorder);
     MPI_Comm_rank(MPI_COMM_WORLD, &my_torus_rank);
 
-    // Splitting the grid communicator into rows
-    //int remaindims[2] = { 0, 1 }; // from Stackoverflow
-    //MPI_Comm comm_row;
-    //MPI_Cart_sub(*comm_cart, remaindims, &comm_row);
-
     /*--------Data------------*/
 
     /*dimension of an individual block*/
@@ -102,9 +97,7 @@ int main(int argc, char *argv[]){
 
     /*blocks*/
     int A[n*n];
-    int AC[n*n];
     int B[n*n];
-    int BC[n*n];
     int C[n*n];
     int CC[n*n];
 
@@ -123,8 +116,6 @@ int main(int argc, char *argv[]){
     // testing
     printf("Process %d's coords: ", my_rank);
     print_array_int(coords, ndims);
-    //print_matrix(A, n);
-    //print_matrix(B, n);
     //still for testing: reconstruct the big matrices at process 0 and print them
     if (my_rank == 0){
         int *MA = (int *) malloc(n*n*q*q*sizeof(int));
@@ -144,10 +135,10 @@ int main(int argc, char *argv[]){
                 }
             }
         }
-        //printf("MA = \n");
-        //print_matrix(MA, n*q);
-        //printf("MB = \n");
-        //print_matrix(MB, n*q);
+        printf("MA = \n");
+        print_matrix(MA, n*q);
+        printf("MB = \n");
+        print_matrix(MB, n*q);
         matrix_product(MA, MB, MC, n*q);
         printf("MA*MB = \n");
         print_matrix(MC, n*q);
@@ -156,15 +147,11 @@ int main(int argc, char *argv[]){
     int src, dest;
     // Preskewing of A
     MPI_Cart_shift(*comm_cart, 1, coords[0], &src, &dest);
-    MPI_Send(A, n*n, MPI_INT, src, 99, *comm_cart);
-    MPI_Recv(AC, n*n, MPI_INT, dest, 99, *comm_cart, &status);
-    matrix_copy(AC, A, n);
+    MPI_Sendrecv_replace(A, n*n, MPI_INT, src, 99, dest, 99, *comm_cart, &status);
 
     // Preskewing of B
     MPI_Cart_shift(*comm_cart, 0, coords[1], &src, &dest);
-    MPI_Send(B, n*n, MPI_INT, src, 99, *comm_cart);
-    MPI_Recv(BC, n*n, MPI_INT, dest, 99, *comm_cart, &status);
-    matrix_copy(BC, B, n);
+    MPI_Sendrecv_replace(B, n*n, MPI_INT, src, 99, dest, 99, *comm_cart, &status);
      
     // iterations of Cannon algorithm 
     int k;
@@ -175,28 +162,20 @@ int main(int argc, char *argv[]){
 
         // horizontal shift of A
         MPI_Cart_shift(*comm_cart, 1, 1, &src, &dest);
-        MPI_Send(A, n*n, MPI_INT, src, 99, *comm_cart);
-        MPI_Recv(AC, n*n, MPI_INT, dest, 99, *comm_cart, &status);
-        matrix_copy(AC, A, n);
+        MPI_Sendrecv_replace(A, n*n, MPI_INT, src, 99, dest, 99, *comm_cart, &status);
 
         // vertical shift of B
         MPI_Cart_shift(*comm_cart, 0, 1, &src, &dest);
-        MPI_Send(B, n*n, MPI_INT, src, 99, *comm_cart);
-        MPI_Recv(BC, n*n, MPI_INT, dest, 99, *comm_cart, &status);
-        matrix_copy(BC, B, n);
+        MPI_Sendrecv_replace(B, n*n, MPI_INT, src, 99, dest, 99, *comm_cart, &status);
     }
     
     // Postskewing of A
     MPI_Cart_shift(*comm_cart, 1, coords[0], &src, &dest);
-    MPI_Send(A, n*n, MPI_INT, dest, 99, *comm_cart);
-    MPI_Recv(AC, n*n, MPI_INT, src, 99, *comm_cart, &status);
-    matrix_copy(AC, A, n);
+    MPI_Sendrecv_replace(A, n*n, MPI_INT, dest, 99, src, 99, *comm_cart, &status);
 
     // Postskewing of B
     MPI_Cart_shift(*comm_cart, 0, coords[1], &src, &dest);
-    MPI_Send(B, n*n, MPI_INT, dest, 99, *comm_cart);
-    MPI_Recv(BC, n*n, MPI_INT, src, 99, *comm_cart, &status);
-    matrix_copy(BC, B, n);
+    MPI_Sendrecv_replace(A, n*n, MPI_INT, dest, 99, src, 99, *comm_cart, &status);
 
     printf("C at block %dx%d\n", coords[0], coords[1]);
     print_matrix(C, n);
