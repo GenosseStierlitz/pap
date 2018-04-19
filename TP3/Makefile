@@ -1,4 +1,4 @@
-all: hw1 hw2 hw3 hw4 hw5 hw6 hw7 broadcast sum sum2 barrier fox 
+all: hw1 hw2 hw3 hw4 hw5 hw6 hw7 broadcast sum sum2 barrier fox_totally_going_to_work 
 
 hw1: hw1.c
 	mpicc -o hw1 hw1.c
@@ -33,5 +33,5 @@ sum2: sum2.c
 barrier: barrier.c
 	mpicc -o barrier barrier.c
 
-fox: fox.c
-	mpicc -o fox fox.c -lm
+fox_totally_going_to_work: fox_totally_going_to_work.c
+	mpicc -o fox_totally_going_to_work fox_totally_going_to_work.c -lm
